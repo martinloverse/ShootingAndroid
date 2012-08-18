@@ -1,13 +1,21 @@
 
 enchant();
+
+//iOS出音を鳴らす魔法の言葉
+enchant.Sound.enabledInMobileSafari = true;
+
 window.onload = function(){
+
+
     game = new Game(320, 320);
     game.fps = 24;
    
      //画像の読み込み
-     game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
-                         'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
-                         'sound/bomb2.wav','sound/item.wav','img/bg.png');
+     // game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
+                         // 'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
+                         // 'sound/bomb2.wav','sound/item.wav','img/bg.png');
+     game.preload('img/graphic.png',
+                         'img/effect0.gif','img/chara1.gif','img/bg.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -38,9 +46,12 @@ window.onload = function(){
           background = new Background();
 
           //BGMを鳴らす
-        bgm = game.assets['sound/bgm.mp3'].clone();
-        bgm.play();
-        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
+        // bgm = game.assets['sound/bgm.mp3'].clone();
+        // bgm.play();
+        game.load("sound/bgm.mp3", function() {
+game.assets["sound/bgm.mp3"].play();
+});
+//        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
 
         game.rootScene.backgroundColor = "#000000";
 
@@ -88,7 +99,10 @@ window.onload = function(){
                      bossBgm.play();
                     }
                  }else{
-                     bgm.currentTime = 0;
+                     // 80ポートでないと、currentTime=0が動かない。。
+                     bgm.stop();
+                     bgm = game.assets['sound/bgm.mp3'].clone();
+                     // bgm.currentTime = 0;
                      bgm.play();
                  }
             }
