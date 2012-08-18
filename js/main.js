@@ -1,8 +1,8 @@
 
-enchant();
-
 //iOS出音を鳴らす魔法の言葉
 enchant.Sound.enabledInMobileSafari = true;
+
+enchant();
 
 window.onload = function(){
 
@@ -48,9 +48,9 @@ window.onload = function(){
           //BGMを鳴らす
         // bgm = game.assets['sound/bgm.mp3'].clone();
         // bgm.play();
-        game.load("sound/bgm.mp3", function() {
-game.assets["sound/bgm.mp3"].play();
-});
+        // game.load("sound/bgm.mp3", function() {
+// game.assets["sound/bgm.mp3"].play();
+// });
 //        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
 
         game.rootScene.backgroundColor = "#000000";
@@ -86,7 +86,7 @@ game.assets["sound/bgm.mp3"].play();
        
           //ゲーム全体の進行をrootSceneのenterframeイベントで行う
         game.rootScene.addEventListener('enterframe', function(){
-            if(game.time == 0)bgm.currentTime = 0;
+            // if(game.time == 0)bgm.currentTime = 0;
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
             game.beatCount = Math.floor(game.time / game.beatSpan) - introBeat;
@@ -100,10 +100,10 @@ game.assets["sound/bgm.mp3"].play();
                     }
                  }else{
                      // 80ポートでないと、currentTime=0が動かない。。
-                     bgm.stop();
-                     bgm = game.assets['sound/bgm.mp3'].clone();
-                     // bgm.currentTime = 0;
-                     bgm.play();
+                     // bgm.stop();
+                     // bgm = game.assets['sound/bgm.mp3'].clone();
+                     // // bgm.currentTime = 0;
+                     // bgm.play();
                  }
             }
            
@@ -136,6 +136,9 @@ game.assets["sound/bgm.mp3"].play();
           //タッチ操作に対応する処理
         game.rootScene.addEventListener('touchstart', function(e){
             touching = true;
+                    game.load("sound/bgm.mp3", function() {
+game.assets["sound/bgm.mp3"].play();
+});
         });
         game.rootScene.addEventListener('touchend', function(e){
             touching = false;
