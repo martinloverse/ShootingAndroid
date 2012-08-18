@@ -5,8 +5,9 @@ window.onload = function(){
     game.fps = 24;
    
      //画像の読み込み
-     game.preload('graphic.png','bgm.mp3','boss.mp3',
-                         'effect0.gif','chara1.gif','bomb1.wav','bomb2.wav','item.wav','bg.png');
+     game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
+                         'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
+                         'sound/bomb2.wav','sound/item.wav','img/bg.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -37,9 +38,9 @@ window.onload = function(){
           background = new Background();
 
           //BGMを鳴らす
-        bgm = game.assets['bgm.mp3'].clone();
+        bgm = game.assets['sound/bgm.mp3'].clone();
         bgm.play();
-        bossBgm = game.assets['boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
+        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
 
         game.rootScene.backgroundColor = "#000000";
 
@@ -147,7 +148,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
         this.height = 16;
         this.dead = false;
        
-        this.image = game.assets['graphic.png'];
+        this.image = game.assets['img/graphic.png'];
        
         this.frame = 0;
        
@@ -214,7 +215,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     this.muteki = true;
                     this.mutekiTime = game.beatSpan * 8;
                     var blast = new Blast(this.x,this.y);
-                    var se = game.assets['bomb1.wav'].clone();
+                    var se = game.assets['sound/bomb1.wav'].clone();
                     se.play();
                 }
             }
@@ -234,7 +235,7 @@ var Blast = enchant.Class.create(enchant.Sprite, {
         enchant.Sprite.call(this);
         this.x = x;
         this.y = y;
-        this.image = game.assets['effect0.gif'];
+        this.image = game.assets['img/effect0.gif'];
         this.width = 16;
         this.height = 16;
         this.dead = false;
@@ -264,7 +265,7 @@ var BigBlast = enchant.Class.create(enchant.Sprite, {
         enchant.Sprite.call(this);
         this.x = x;
         this.y = y;
-        this.image = game.assets['effect0.gif'];
+        this.image = game.assets['img/effect0.gif'];
         this.width = 16;
         this.height = 16;
         this.dead = false;
@@ -301,7 +302,7 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
         this.targetX = x;
         this.targetY = y;
         this.onhit = function(){};       
-        this.image = game.assets['graphic.png'];
+        this.image = game.assets['img/graphic.png'];
         this.frame = 3;
         this.key = 0;
 
@@ -326,7 +327,7 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
                         game.score += game.rate * this.score;
                         this.onhit();
                         this.remove();
-                        var se = game.assets['bomb1.wav'].clone();
+                        var se = game.assets['sound/bomb1.wav'].clone();
                         se.play();
                        
                     }
@@ -352,7 +353,7 @@ var Shoot = enchant.Class.create(enchant.Sprite, {
         enchant.Sprite.call(this);
         this.x = x;
         this.y = y;
-        this.image = game.assets['graphic.png'];
+        this.image = game.assets['img/graphic.png'];
         this.width = 16;
         this.height = 16;
         this.dead = false;
@@ -389,7 +390,7 @@ var Bullet = enchant.Class.create(enchant.Sprite, {
         enchant.Sprite.call(this);
         this.x = x;
         this.y = y;
-        this.image = game.assets['graphic.png'];
+        this.image = game.assets['img/graphic.png'];
         this.width = 16;
         this.height = 16;
         this.frame = 1;
@@ -432,7 +433,7 @@ var Item = enchant.Class.create(enchant.Sprite, {
         this.height = 16;
         this.dead = false;
        
-        this.image = game.assets['graphic.png'];
+        this.image = game.assets['img/graphic.png'];
         this.frame = 8;
         this.key = 0;
 
@@ -447,7 +448,7 @@ var Item = enchant.Class.create(enchant.Sprite, {
             if(this.intersect(player)){//プレイヤーと当たり判定
                 this.remove();
                 this.onget();//アイテムごとの処理をする
-                var se = game.assets['item.wav'].clone();
+                var se = game.assets['sound/item.wav'].clone();
                 se.play();//BGMを鳴らす
             }
             this.x += this.speed * Math.cos(this.direction);
@@ -470,7 +471,7 @@ var Background = enchant.Class.create(enchant.Sprite, {
         this.x = 0;
         this.y = 0;
        
-        this.image = game.assets['bg.png'];
+        this.image = game.assets['img/bg.png'];
        
         this.addEventListener('enterframe', function(){
                this.x--; //ひたすら背景をスクロール
@@ -752,7 +753,7 @@ enemiesFunctionTable = {
 },
 "boss": function(x, y){
     var e = new Enemy(x, y);
-    e.image = game.assets['chara1.gif'];
+    e.image = game.assets['img/chara1.gif'];
     e.width = 32;
     e.height = 32;
     e.scaleX = 3;
