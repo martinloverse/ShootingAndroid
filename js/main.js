@@ -17,9 +17,9 @@ window.onload = function(){
     game.fps = 24;
 
      //画像の読み込み
-     game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
-                         'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
-                         'sound/bomb2.wav','sound/item.wav','img/bg.png','img/background.png'
+     game.preload('img/graphic.png','sound/loop_142.mp3','sound/boss.mp3',
+                         'img/effect0.gif','img/chara1.gif','sound/bomb1.mp3',
+                         'sound/bomb2.mp3','sound/item.mp3','img/bg.png','img/background.png'
                          ,'img/playershoot.png','img/player.png','img/enemy.png');
 
      //初期設定
@@ -52,7 +52,7 @@ window.onload = function(){
         background = new Background(); 
 
         //BGMを鳴らす
-        bgm = game.assets['sound/bgm.mp3'].clone();
+        bgm = game.assets['sound/loop_142.mp3'].clone();
         bgm.play();
         bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
 
@@ -94,22 +94,32 @@ window.onload = function(){
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
             game.beatCount = Math.floor(game.time / game.beatSpan) - introBeat;
 
-            if(game.beatCount % 32 == 0 && game.time % (game.beatSpan) == 0){
-                 if(bossBattle){//ボス戦の場合
-                   if(game.beatCount % 32 == 0){
-                     bgm.stop();
-                     bossBgm.currentTime = 0;
-                     bossBgm.play();
-                    }
-                 }else{
-                     // 80ポートでないと、currentTime=0が動かない。。
+            // if(game.beatCount % 32 == 0 && game.time % (game.beatSpan) == 0){
+                 // if(bossBattle){//ボス戦の場合
+                   // if(game.beatCount % 32 == 0){
                      // bgm.stop();
-                     // bgm = game.assets['sound/bgm.mp3'].clone();
-                     bgm.currentTime = 0;
-                     bgm.play();
-                 }
-            }
-           
+                     // bossBgm.currentTime = 0;
+                     // bossBgm.play();
+                    // }
+                 // }else{
+                     // // 80ポートでないと、currentTime=0が動かない。。
+                     // console.log('currentTime:' + bgm.currentTime);
+                     // if(bgm.currentTime >= 20) {
+                     // bgm.stop();
+                     // bgm = game.assets['sound/loop_142.mp3'].clone();
+// //                         bgm.currentTime = 0;
+                         // bgm.play();
+                     // }
+                 // }
+            // }
+                     // if(bgm.currentTime >= 20.3) {
+                     // bgm.stop();
+                     // bgm = game.assets['sound/loop_142.mp3'].clone();
+// //                         bgm.currentTime = 0;
+                         // bgm.play();
+                     // }
+
+
             if((game.beatCount) >= 0 && game.time % (game.beatSpan) == 0){
                 if(game.beatCount > stages.length){
                     // ゲームクリア
@@ -289,7 +299,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     this.muteki = true;
                     this.mutekiTime = game.beatSpan * 8;
                     var blast = new Blast(this.x + 20,this.y + 10);
-                    var se = game.assets['sound/bomb1.wav'].clone();
+                    var se = game.assets['sound/bomb1.mp3'].clone();
                     se.play();
                 }
             }
@@ -401,8 +411,8 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
                         game.score += game.rate * this.score;
                         this.onhit();
                         this.remove();
-                        // var se = game.assets['sound/bomb1.wav'].clone();
-                        // se.play();
+                        var se = game.assets['sound/bomb1.mp3'].clone();
+                        se.play();
                        
                     }
                 }
@@ -522,7 +532,7 @@ var Item = enchant.Class.create(enchant.Sprite, {
             if(this.intersect(player)){//プレイヤーと当たり判定
                 this.remove();
                 this.onget();//アイテムごとの処理をする
-                var se = game.assets['sound/item.wav'].clone();
+                var se = game.assets['sound/item.mp3'].clone();
                 se.play();//BGMを鳴らす
             }
             this.x += this.speed * Math.cos(this.direction);
