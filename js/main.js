@@ -20,7 +20,8 @@ window.onload = function(){
      game.preload('img/graphic.png','sound/loop_10.mp3','sound/loop_142.mp3','sound/boss.mp3','sound/j-2.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.mp3',
                          'sound/bomb2.mp3','sound/item.mp3','img/bg.png','img/background.png'
-                         ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png','img/bomb.png','img/button.png');
+                         ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png','img/bomb.png','img/button.png',
+                         'sound/bomb_all.mp3');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -99,10 +100,8 @@ window.onload = function(){
             if(game.button.pressed && !game.bomb) {
                 var bomb = new Bomb(0,0);
                 game.bomb = bomb;
-                // setTimeout(function(){
-                    // game.rootScene.removeChild(game.bomb);
-                    // game.bomb = false;
-                    // },2000);
+                bombse = game.assets['sound/bomb_all.mp3'].clone();
+                bombse.play(); 
             }
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
@@ -237,6 +236,9 @@ var Bomb = enchant.Class.create(enchant.Sprite, {
                         var se = game.assets['sound/bomb1.mp3'].clone();
                         se.play();
                     }
+                }
+                for (var i in bullets) {
+                    bullets[i].remove();
                 }
             } else {
                 this.remove();
