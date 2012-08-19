@@ -7,7 +7,7 @@ enchant();
 window.onload = function(){
 
 
-    game = new Game(480, 320);
+    game = new Game(480, 300);
     game.fps = 24;
 
      //画像の読み込み
@@ -49,7 +49,7 @@ window.onload = function(){
         bgm.play();
         bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
 
-        game.rootScene.backgroundColor = "#FFFFFF";
+        game.rootScene.backgroundColor = "#000000";
 
           //スコアを表示
         scoreLabel = new MutableText(8, 8, game.width, ""); //draw.text.jsプラグインを使用
