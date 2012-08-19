@@ -224,8 +224,6 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     }
                 }
 
-                //TODO: 移動制御
-
                 var input = game.input;
                 var pad = game.pad;
                 if (pad.isTouched) {
@@ -272,7 +270,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
             }
             for(var i in bullets){     //全ての敵弾について当たり判定を行う
                 if(this.muteki)continue;
-                if(this.within(bullets[i],8)){
+                if(this.within(bullets[i],10)){
                     // die;
                     game.life --;     //ライフをひとつ減らす
                     game.rate = 1;
@@ -283,7 +281,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     bullets[i].remove();
                     this.muteki = true;
                     this.mutekiTime = game.beatSpan * 8;
-                    var blast = new Blast(this.x,this.y);
+                    var blast = new Blast(this.x + 20,this.y + 10);
                     var se = game.assets['sound/bomb1.wav'].clone();
                     se.play();
                 }
@@ -292,7 +290,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
                 this.muteki = false;
             }
            
-            this.frame = this.muteki ? (game.frame % 2 == 0 ? 16 : 0) : 0;
+            this.frame = this.muteki ? (game.frame % 2 == 0 ? 1 : 0) : 0;
         });
         game.rootScene.addChild(this);
     }
