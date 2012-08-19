@@ -17,7 +17,7 @@ window.onload = function(){
     game.fps = 24;
 
      //画像の読み込み
-     game.preload('img/graphic.png','sound/loop_142.mp3','sound/boss.mp3','sound/j-2.mp3',
+     game.preload('img/graphic.png','sound/loop_10.mp3','sound/loop_142.mp3','sound/boss.mp3','sound/j-2.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.mp3',
                          'sound/bomb2.mp3','sound/item.mp3','img/bg.png','img/background.png'
                          ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png');
@@ -45,6 +45,8 @@ window.onload = function(){
     items = [];
    
     bossBattle = false;     //ボス戦フラグ
+    bossMusic = false;
+
    
     game.onload = function(){
 
@@ -54,7 +56,7 @@ window.onload = function(){
         //BGMを鳴らす
         bgm = game.assets['sound/loop_142.mp3'].clone();
         bgm.play();
-        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
+        bossBgm = game.assets['sound/loop_10.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
 
         game.rootScene.backgroundColor = "#000000";
 
@@ -93,6 +95,13 @@ window.onload = function(){
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
             game.beatCount = Math.floor(game.time / game.beatSpan) - introBeat;
+
+            if (bossBattle && !bossMusic) {
+                bgm.stop();
+                bossBgm.currentTime = 0;
+                bossBgm.play();
+                bossMusic = true;
+            }
 
             // if(game.beatCount % 32 == 0 && game.time % (game.beatSpan) == 0){
                  // if(bossBattle){//ボス戦の場合
@@ -292,6 +301,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     game.life --;     //ライフをひとつ減らす
                     game.rate = 1;
                     if(game.life < 0){ //ライフが0になったらゲームオーバー
+                        bgm.stop();
                         game.end(game.score, "GameOver Score: "+ game.score);
                     }
                     this.power -= bullets[i];
@@ -845,6 +855,7 @@ enemiesFunctionTable = {
     e.scaleX = 3;
     e.scaleY = 3;
     e.frame = 0;
+    //TODO ボスパワー
     e.power = 100;
     e.span = game.beatSpan * 8;
     e.targetX = x;
@@ -855,7 +866,7 @@ enemiesFunctionTable = {
     e.remove = function(){
                b = new BigBlast( e.x,
                                     e.y+50);
-             bgm.stop();
+             bossBgm.stop();
           for(i=0;i<15;i++){
                b = new Blast( Math.random()*100+e.x,
                                  Math.random()*100+e.y);
@@ -863,7 +874,6 @@ enemiesFunctionTable = {
           setTimeout(function(){
              game.clear(game.score,'Clear! Score:' + game.score);
              var bel = game.assets['sound/j-2.mp3'].play();
-//             bel.play();
              },5000);
     };
     e.bulletpattern = {};
