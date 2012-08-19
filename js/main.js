@@ -1,21 +1,19 @@
 
 //iOS出音を鳴らす魔法の言葉
-enchant.Sound.enabledInMobileSafari = true;
+//enchant.Sound.enabledInMobileSafari = true;
 
 enchant();
 
 window.onload = function(){
 
 
-    game = new Game(320, 320);
+    game = new Game(480, 320);
     game.fps = 24;
-   
+
      //画像の読み込み
-     // game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
-                         // 'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
-                         // 'sound/bomb2.wav','sound/item.wav','img/bg.png');
-     game.preload('img/graphic.png',
-                         'img/effect0.gif','img/chara1.gif','img/bg.png');
+     game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
+                         'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
+                         'sound/bomb2.wav','sound/item.wav','img/bg.png','img/background.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -42,18 +40,16 @@ window.onload = function(){
     bossBattle = false;     //ボス戦フラグ
    
     game.onload = function(){
-          //自動的にスクロールする背景を設定
-          background = new Background();
 
-          //BGMを鳴らす
-        // bgm = game.assets['sound/bgm.mp3'].clone();
-        // bgm.play();
-        // game.load("sound/bgm.mp3", function() {
-// game.assets["sound/bgm.mp3"].play();
-// });
-//        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
+        //自動的にスクロールする背景を設定
+        background = new Background(); 
 
-        game.rootScene.backgroundColor = "#000000";
+        //BGMを鳴らす
+        bgm = game.assets['sound/bgm.mp3'].clone();
+        bgm.play();
+        bossBgm = game.assets['sound/boss.mp3'].clone(); //ボス用のBGMは鳴らさずにとっておく
+
+        game.rootScene.backgroundColor = "#FFFFFF";
 
           //スコアを表示
         scoreLabel = new MutableText(8, 8, game.width, ""); //draw.text.jsプラグインを使用
@@ -86,7 +82,7 @@ window.onload = function(){
        
           //ゲーム全体の進行をrootSceneのenterframeイベントで行う
         game.rootScene.addEventListener('enterframe', function(){
-            // if(game.time == 0)bgm.currentTime = 0;
+            if(game.time == 0)bgm.currentTime = 0;
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
             game.beatCount = Math.floor(game.time / game.beatSpan) - introBeat;
@@ -100,10 +96,10 @@ window.onload = function(){
                     }
                  }else{
                      // 80ポートでないと、currentTime=0が動かない。。
-                     // bgm.stop();
-                     // bgm = game.assets['sound/bgm.mp3'].clone();
-                     // // bgm.currentTime = 0;
-                     // bgm.play();
+                     bgm.stop();
+                     bgm = game.assets['sound/bgm.mp3'].clone();
+                     // bgm.currentTime = 0;
+                     bgm.play();
                  }
             }
            
@@ -136,9 +132,6 @@ window.onload = function(){
           //タッチ操作に対応する処理
         game.rootScene.addEventListener('touchstart', function(e){
             touching = true;
-                    game.load("sound/bgm.mp3", function() {
-game.assets["sound/bgm.mp3"].play();
-});
         });
         game.rootScene.addEventListener('touchend', function(e){
             touching = false;
@@ -146,7 +139,14 @@ game.assets["sound/bgm.mp3"].play();
         game.rootScene.addEventListener('touchmove', function(e){
             player.targetY = e.localY;
         })
+
+        // display Pad
+        var pad = new APad();
+        pad.x = 0;
+        pad.y = 224;
+        game.rootScene.addChild(pad);
     }
+
     game.start(); //ゲーム開始
 }
 
@@ -484,15 +484,15 @@ var Item = enchant.Class.create(enchant.Sprite, {
 //背景クラス
 var Background = enchant.Class.create(enchant.Sprite, {
     initialize: function(){
-        enchant.Sprite.call(this,640,320);//ちょっと大きめの背景を用意する
+        enchant.Sprite.call(this,960,600);//ちょっと大きめの背景を用意する
         this.x = 0;
         this.y = 0;
        
-        this.image = game.assets['img/bg.png'];
+        this.image = game.assets['img/background.png'];
        
         this.addEventListener('enterframe', function(){
                this.x--; //ひたすら背景をスクロール
-               if(this.x<=-320)this.x=0; //端っこまで来たら、背景を巻き戻す。この繰り返し
+               if(this.x<=-480)this.x=0; //端っこまで来たら、背景を巻き戻す。この繰り返し
         });
         game.rootScene.addChild(this);
     }
