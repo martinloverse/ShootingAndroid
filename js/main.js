@@ -71,7 +71,7 @@ window.onload = function(){
         game.rootScene.addChild(timeLabel);
 
           //ライフを表示
-        lifeLabel = new MutableText(8, 320 - 32, game.width, "");
+        lifeLabel = new MutableText(480 - (32 * 4 + 8), 8, game.width, "");
         lifeLabel.addEventListener('enterframe', function(){
             this.text = "LIFE " + "OOOOOOOOO".substring(0, game.life);
         });
@@ -140,11 +140,15 @@ window.onload = function(){
             player.targetY = e.localY;
         })
 
-        // display Pad
         var pad = new APad();
         pad.x = 0;
-        pad.y = 224;
+        pad.y = 200;
         game.rootScene.addChild(pad);
+
+        var SPEED = 8;
+        var MOVE_RANGE_X = game.width - player.width;
+        var MOVE_RANGE_Y = game.height - player.height;
+        game.pad = pad;
     }
 
     game.start(); //ゲーム開始
@@ -216,7 +220,47 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     }
                 }
 
-                this.y += (this.targetY - (this.y - 8)) / 3;
+                //TODO: 移動制御
+
+                var input = game.input;
+                var pad = game.pad;
+                if (pad.isTouched) {
+                    this.x += pad.vx * 4;
+                    this.y += pad.vy * 4;
+                }
+                if (input.left) {
+                    this.x -= SPEED;
+                }
+                if (input.right) {
+                    this.x += SPEED;
+                }
+                if (input.up) {
+                    this.y -= SPEED;
+                }
+                if (input.down) {
+                    this.y += SPEED;
+                }
+// 
+                // // 移動可能な範囲を制限
+                // var left = 0;
+                // var right = MOVE_RANGE_X;
+                // var top = 0;
+                // var bottom = MOVE_RANGE_Y;
+// 
+                // // X軸
+                // if (this.x < left) {
+                    // this.x = left;
+                // } else if (this.x > right) {
+                    // this.x = right;
+                // }
+                // // Y軸
+                // if (this.y < top) {
+                    // this.y = top;
+                // } else if (this.y > bottom) {
+                    // this.y = bottom;
+                // }
+
+                //this.y += (this.targetY - (this.y - 8)) / 3;
             }
             for(var i in bullets){     //全ての敵弾について当たり判定を行う
                 if(this.muteki)continue;
