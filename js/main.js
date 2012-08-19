@@ -13,7 +13,8 @@ window.onload = function(){
      //画像の読み込み
      game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
-                         'sound/bomb2.wav','sound/item.wav','img/bg.png','img/background.png');
+                         'sound/bomb2.wav','sound/item.wav','img/bg.png','img/background.png'
+                         ,'img/playershoot.png','img/player.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -155,17 +156,21 @@ var shoots = [];     //プレイヤーの撃った弾の配列
 var bullets = [];     //敵の撃った弾の配列
 var enemies = [];     //敵の配列
 
+var PLAYER_WIDTH = 40;
+var PLAYER_HEIGNT = 20;
+
+
 //プレイヤーのクラス
 var Player = enchant.Class.create(enchant.Sprite, {
     initialize: function(x, y){
         enchant.Sprite.call(this);
         this.x = x;
         this.y = y;
-        this.width = 16;
-        this.height = 16;
+        this.width = PLAYER_WIDTH;
+        this.height = PLAYER_HEIGNT;
         this.dead = false;
        
-        this.image = game.assets['img/graphic.png'];
+        this.image = game.assets['img/player.png'];
        
         this.frame = 0;
        
