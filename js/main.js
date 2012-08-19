@@ -144,10 +144,6 @@ window.onload = function(){
         pad.x = 0;
         pad.y = 200;
         game.rootScene.addChild(pad);
-
-        var SPEED = 8;
-        var MOVE_RANGE_X = game.width - player.width;
-        var MOVE_RANGE_Y = game.height - player.height;
         game.pad = pad;
     }
 
@@ -240,25 +236,29 @@ var Player = enchant.Class.create(enchant.Sprite, {
                 if (input.down) {
                     this.y += SPEED;
                 }
-// 
-                // // 移動可能な範囲を制限
-                // var left = 0;
-                // var right = MOVE_RANGE_X;
-                // var top = 0;
-                // var bottom = MOVE_RANGE_Y;
-// 
-                // // X軸
-                // if (this.x < left) {
-                    // this.x = left;
-                // } else if (this.x > right) {
-                    // this.x = right;
-                // }
-                // // Y軸
-                // if (this.y < top) {
-                    // this.y = top;
-                // } else if (this.y > bottom) {
-                    // this.y = bottom;
-                // }
+
+        var SPEED = 16;
+        var MOVE_RANGE_X = game.width - player.width;
+        var MOVE_RANGE_Y = game.height - player.height;
+
+                // 移動可能な範囲を制限
+                var left = 0;
+                var right = MOVE_RANGE_X;
+                var top = 0;
+                var bottom = MOVE_RANGE_Y;
+
+                // X軸
+                if (this.x < left) {
+                    this.x = left;
+                } else if (this.x > right) {
+                    this.x = right;
+                }
+                // Y軸
+                if (this.y < top) {
+                    this.y = top;
+                } else if (this.y > bottom) {
+                    this.y = bottom;
+                }
 
                 //this.y += (this.targetY - (this.y - 8)) / 3;
             }
