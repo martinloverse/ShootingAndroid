@@ -99,10 +99,10 @@ window.onload = function(){
             if(game.button.pressed && !game.bomb) {
                 var bomb = new Bomb(0,0);
                 game.bomb = bomb;
-                setTimeout(function(){
-                    game.rootScene.removeChild(game.bomb);
-                    game.bomb = false;
-                    },2000);
+                // setTimeout(function(){
+                    // game.rootScene.removeChild(game.bomb);
+                    // game.bomb = false;
+                    // },2000);
             }
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
@@ -217,13 +217,35 @@ var Bomb = enchant.Class.create(enchant.Sprite, {
 
         game.rootScene.addChild(this);
 
-        this.life = game.frame * 2;
+        this.life = game.fps * 2;
 
         this.addEventListener('enterframe', function(){
             if(--this.life) {
-                this.opacity += 0.05;
+                if (this.life >= game.fps / 2) {
+                    this.opacity += 0.05;
+                } else {
+                    this.opacity -= 0.1;
+                }
+                //画面内の敵弾、敵を一掃
+                for (var i in enemies) {
+                    var blast = new Blast(enemies[i].x, enemies[i].y);
+                    enemies[i].power -= 10;
+                    if(enemies[i].power <= 0){
+                        game.score += game.rate * enemies[i].score;
+                        enemies[i].onhit();
+                        enemies[i].remove();
+                        var se = game.assets['sound/bomb1.mp3'].clone();
+                        se.play();
+                    }
+                }
+            } else {
+                this.remove();
             }
         });
+    },
+    remove: function(){
+        game.bomb = false;
+        game.rootScene.removeChild(this);
     }
 });
 
@@ -482,9 +504,12 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
 
         });
         game.rootScene.addChild(this);
+        this.key = enemies.length;
+        enemies.push(this);
     },
     remove: function(){
         game.rootScene.removeChild(this);
+        delete enemies[this.key];
     }
 });
 
