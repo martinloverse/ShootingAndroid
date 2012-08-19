@@ -103,9 +103,9 @@ window.onload = function(){
                     }
                  }else{
                      // 80ポートでないと、currentTime=0が動かない。。
-                     bgm.stop();
-                     bgm = game.assets['sound/bgm.mp3'].clone();
-                     // bgm.currentTime = 0;
+                     // bgm.stop();
+                     // bgm = game.assets['sound/bgm.mp3'].clone();
+                     bgm.currentTime = 0;
                      bgm.play();
                  }
             }
@@ -224,6 +224,10 @@ var Player = enchant.Class.create(enchant.Sprite, {
                     }
                 }
 
+        var SPEED = 24;
+        var MOVE_RANGE_X = game.width - player.width;
+        var MOVE_RANGE_Y = game.height - player.height;
+
                 var input = game.input;
                 var pad = game.pad;
                 if (pad.isTouched) {
@@ -242,10 +246,6 @@ var Player = enchant.Class.create(enchant.Sprite, {
                 if (input.down) {
                     this.y += SPEED;
                 }
-
-        var SPEED = 16;
-        var MOVE_RANGE_X = game.width - player.width;
-        var MOVE_RANGE_Y = game.height - player.height;
 
                 // 移動可能な範囲を制限
                 var left = 0;
@@ -270,7 +270,14 @@ var Player = enchant.Class.create(enchant.Sprite, {
             }
             for(var i in bullets){     //全ての敵弾について当たり判定を行う
                 if(this.muteki)continue;
-                if(this.within(bullets[i],10)){
+                var enable = {
+                    _offsetX:this._offsetX + 10,
+                    _offsetY:this._offsetY + 5,
+                    width:5,
+                    height:5,
+                    within:this.within
+                }
+                if(this.within(bullets[i],5)){
                     // die;
                     game.life --;     //ライフをひとつ減らす
                     game.rate = 1;
@@ -394,8 +401,8 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
                         game.score += game.rate * this.score;
                         this.onhit();
                         this.remove();
-                        var se = game.assets['sound/bomb1.wav'].clone();
-                        se.play();
+                        // var se = game.assets['sound/bomb1.wav'].clone();
+                        // se.play();
                        
                     }
                 }
