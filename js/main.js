@@ -194,31 +194,31 @@ var Player = enchant.Class.create(enchant.Sprite, {
             if(touching){     //タッチしている間、弾を撃ち続ける
                 if(game.time % this.span == 0){
                     if(this.multiShot){     //マルチショットの場合
-                        var s = new Shoot(this.x, this.y+3);
+                        var s = new Shoot(this.x+35, this.y+8);
                         s.key = shoots.length;
                         s.direction = -0.2;
                               s.vx = s.speed * Math.cos(s.direction);
                               s.vy = s.speed * Math.sin(s.direction);
                         shoots.push(s);
-                        var s = new Shoot(this.x, this.y-3);
+                        var s = new Shoot(this.x+35, this.y+2);
                         s.key = shoots.length;
                         s.direction = 0.2;
                               s.vx = s.speed * Math.cos(s.direction);
                               s.vy = s.speed * Math.sin(s.direction);
                         shoots.push(s);
-                        var s = new Shoot(this.x, this.y);
+                        var s = new Shoot(this.x+35, this.y+5);
                         s.key = shoots.length;
                         shoots.push(s);
 
                     }else if(this.hasBomb){ //ボムを持っている場合
-                        var s = new Shoot(this.x, this.y-3);
+                        var s = new Shoot(this.x + 35, this.y+2);
                         s.key = shoots.length;
                         shoots.push(s);
-                        var s = new Shoot(this.x, this.y+3);
+                        var s = new Shoot(this.x + 35, this.y+8);
                         s.key = shoots.length;
                         shoots.push(s);
                     }else{     //通常の場合
-                    var s = new Shoot(this.x, this.y);
+                    var s = new Shoot(this.x + 35, this.y + 5);
                     s.key = shoots.length;
                     shoots.push(s);
                     }
