@@ -20,7 +20,7 @@ window.onload = function(){
      game.preload('img/graphic.png','sound/bgm.mp3','sound/boss.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.wav',
                          'sound/bomb2.wav','sound/item.wav','img/bg.png','img/background.png'
-                         ,'img/playershoot.png','img/player.png');
+                         ,'img/playershoot.png','img/player.png','img/enemy.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -362,15 +362,15 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
         enchant.Sprite.call(this);
         this.x = x;
         this.y = y;
-        this.width = 16;
-        this.height = 16;
+        this.width = 32;
+        this.height = 32;
         this.dead = false;
         this.score = 100;
         this.targetX = x;
         this.targetY = y;
         this.onhit = function(){};       
-        this.image = game.assets['img/graphic.png'];
-        this.frame = 3;
+        this.image = game.assets['img/enemy.png'];
+        this.frame = 0;
         this.key = 0;
 
         this.power = 10;
@@ -672,14 +672,14 @@ enemiesFunctionTable = {
     var e = new Enemy(x, y);
     e.isPremium = (game.beatCount % 4) == 3;
 
-    e.frame = e.isPremium ? 6 : 3;
+    e.frame = e.isPremium ? 1 : 0;
     e.power = 10;
     e.span = game.beatSpan * 4;
     e.targetX = x;
     e.targetY = y;
-     e.scaleX = 1.5;
-    e.scaleY = 1.5;
-   e.x = 320 ;
+    e.scaleX = 0.75;
+    e.scaleY = 0.75;
+   e.x = FRAME_SIZE_WIDTH ;
     e.y = 152 + (y - 152)*3;
     e.speed = 1;
     e.direction = 0;
@@ -718,7 +718,7 @@ enemiesFunctionTable = {
 
 1: function(x, y){
     var e = new Enemy(x, y);
-    e.frame = 4;
+    e.frame = 2;
     e.power = 30;
     e.span = game.beatSpan * 2;
     e.speed = 0;
@@ -727,7 +727,7 @@ enemiesFunctionTable = {
     e.scaleX = 1;
     e.scaleY = 1;
 
-    e.x = 320;
+    e.x = FRAME_SIZE_WIDTH;
     e.y = 152;
     e.score = 200;
     e.moveSpeed = 4;
@@ -764,15 +764,15 @@ enemiesFunctionTable = {
 },
 "1a": function(x, y){
     var e = new Enemy(x, y);
-    e.frame = 4;
+    e.frame = 1;
     e.span = game.beatSpan;
     e.speed = 0;
     e.power = 50;
-    e.scaleX = 2;
-    e.scaleY = 2;
+    e.scaleX = 1.5;
+    e.scaleY = 1.5;
     e.targetX = x;
     e.targetY = y;
-    e.x = 320;
+    e.x = FRAME_SIZE_WIDTH;
     e.y = 152;
     e.score = 200;
     e.addEventListener('enterframe', function(){
@@ -793,15 +793,15 @@ enemiesFunctionTable = {
 
 2: function(x, y){
     var e = new Enemy(x, y);
-    e.frame = 5;
-    e.scaleX = 2.5;
-    e.scaleY = 2.5;
+    e.frame = 2;
+    e.scaleX = 2;
+    e.scaleY = 2;
     e.span = game.beatSpan * 4;
     e.power = 100;
     e.targetX = x;
     e.targetY = y;
-    e.x = 320;
-    e.y = 152;   
+    e.x = FRAME_SIZE_WIDTH;
+    e.y = 152;
     e.score = 300;
     e.addEventListener('enterframe', function(){
         if(game.time % this.span == 0){
@@ -820,12 +820,12 @@ enemiesFunctionTable = {
 },
 "boss": function(x, y){
     var e = new Enemy(x, y);
-    e.image = game.assets['img/chara1.gif'];
+    e.image = game.assets['img/enemy.gif'];
     e.width = 32;
     e.height = 32;
     e.scaleX = 3;
     e.scaleY = 3;
-    e.frame = 5;
+    e.frame = 3;
     e.power = 1500;
     e.span = game.beatSpan * 8;
     e.targetX = x;
