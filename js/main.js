@@ -17,7 +17,7 @@ window.onload = function(){
     game.fps = 24;
 
      //画像の読み込み
-     game.preload('img/graphic.png','sound/loop_142.mp3','sound/boss.mp3',
+     game.preload('img/graphic.png','sound/loop_142.mp3','sound/boss.mp3','sound/j-2.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.mp3',
                          'sound/bomb2.mp3','sound/item.mp3','img/bg.png','img/background.png'
                          ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png');
@@ -845,23 +845,26 @@ enemiesFunctionTable = {
     e.scaleX = 3;
     e.scaleY = 3;
     e.frame = 0;
-    e.power = 1000;
+    e.power = 100;
     e.span = game.beatSpan * 8;
     e.targetX = x;
     e.targetY = y;
     e.score = 2000;
     e.x = 1600;
     e.y = 152;
-    e.onhit = function(){
+    e.remove = function(){
                b = new BigBlast( e.x,
                                     e.y+50);
-          for(i=0;i<40;i++){
+             bgm.stop();
+          for(i=0;i<15;i++){
                b = new Blast( Math.random()*100+e.x,
                                  Math.random()*100+e.y);
           }
-//TODO: 終了判定
-          // setTimeout(function(){
-             // game.end(game.score,'Clear! Score:' + game.score);},4000);
+          setTimeout(function(){
+             game.clear(game.score,'Clear! Score:' + game.score);
+             var bel = game.assets['sound/j-2.mp3'].play();
+//             bel.play();
+             },5000);
     };
     e.bulletpattern = {};
     e.bulletpattern[0] = function(){
