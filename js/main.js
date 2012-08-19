@@ -20,7 +20,7 @@ window.onload = function(){
      game.preload('img/graphic.png','sound/loop_10.mp3','sound/loop_142.mp3','sound/boss.mp3','sound/j-2.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.mp3',
                          'sound/bomb2.mp3','sound/item.mp3','img/bg.png','img/background.png'
-                         ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png');
+                         ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png','img/bomb.png','img/button.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -88,10 +88,22 @@ window.onload = function(){
 
           //プレイヤー(自機)を表示する
         player = new Player(16, 160 - 16/2);
-       
+
+       //TODO bomb
+//       bomb = new Bomb(0,0);
+
           //ゲーム全体の進行をrootSceneのenterframeイベントで行う
         game.rootScene.addEventListener('enterframe', function(){
             if(game.time == 0)bgm.currentTime = 0;
+
+            if(game.button.pressed && !game.bomb) {
+                var bomb = new Bomb(0,0);
+                game.bomb = bomb;
+                setTimeout(function(){
+                    game.rootScene.removeChild(game.bomb);
+                    game.bomb = false;
+                    },2000);
+            }
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
             game.beatCount = Math.floor(game.time / game.beatSpan) - introBeat;
@@ -171,6 +183,12 @@ window.onload = function(){
         pad.y = 200;
         game.rootScene.addChild(pad);
         game.pad = pad;
+
+        var button = new OrgButton();
+        button.x = 410;
+        button.y = 235;
+        game.rootScene.addChild(button);
+        game.button = button;
     }
 
     game.start(); //ゲーム開始
@@ -181,6 +199,33 @@ var shoots = [];     //プレイヤーの撃った弾の配列
 var bullets = [];     //敵の撃った弾の配列
 var enemies = [];     //敵の配列
 
+//ボム（画面一掃）のクラス
+var Bomb = enchant.Class.create(enchant.Sprite, {
+    initialize: function(x, y){
+        enchant.Sprite.call(this);
+        this.x = x;
+        this.y = y;
+        this.width = FRAME_SIZE_WIDTH;
+        this.height = FRAME_SIZE_HEIGHT;
+        this.dead = false;
+       
+        this.image = game.assets['img/bomb.png'];
+       
+        this.frame = 0;
+        this._element.style.zIndex = -100;
+        this.opacity = 0.0;
+
+        game.rootScene.addChild(this);
+
+        this.life = game.frame * 2;
+
+        this.addEventListener('enterframe', function(){
+            if(--this.life) {
+                this.opacity += 0.05;
+            }
+        });
+    }
+});
 
 //プレイヤーのクラス
 var Player = enchant.Class.create(enchant.Sprite, {
@@ -210,6 +255,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
         this.mutekiTime = 0;
        
         this.addEventListener('enterframe', function(){
+            var input = game.input;
             if(touching){     //タッチしている間、弾を撃ち続ける
                 if(game.time % this.span == 0){
                     if(this.multiShot){     //マルチショットの場合
@@ -287,6 +333,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
 
                 //this.y += (this.targetY - (this.y - 8)) / 3;
             }
+
             for(var i in bullets){     //全ての敵弾について当たり判定を行う
                 if(this.muteki)continue;
                 var enable = {
@@ -571,6 +618,7 @@ var Background = enchant.Class.create(enchant.Sprite, {
                this.x--; //ひたすら背景をスクロール
                if(this.x<=-480)this.x=0; //端っこまで来たら、背景を巻き戻す。この繰り返し
         });
+        this._element.style.zIndex = -200;
         game.rootScene.addChild(this);
     }
 });
@@ -583,9 +631,9 @@ function rand(max){
 
 
 //ステージデータ
-//var stages = "____ 22__ 1_12 __1_ 1__2_ __2_ _5__ W4_1 ___2 i___ _gg_ 4___ 5656 1212 ____ ____ ____ ____ 3434 3434 ____ ____ 5566 f___ f___ Z___ ____ 2ge_ ____ f222 ____ ____ ____ X___ ____ ____ ihih j___ ____ f___ ____ Y___ ivv_ ____ ____ ih43 ihkj ____ Z___ ih34 ihhi W___ ____ ih43 3434 v___ Z___ ____ 4_4_ i_h_ i_f_ ____ ____ P___ ____ hihi ____ ____ ihih f_g_ j___ ____ hihi k___ ____ ____ ihhi ____ ____ ____  ____ _ihk _kgi  _4gh 34ih __fg  ____ ____ ____  ";
+var stages = "____ 22__ 1_12 __1_ 1__2_ __2_ _5__ W4_1 ___2 i___ _gg_ 4___ 5656 1212 ____ ____ ____ ____ 3434 3434 ____ ____ 5566 f___ f___ Z___ ____ 2ge_ ____ f222 ____ ____ ____ X___ ____ ____ ihih j___ ____ f___ ____ Y___ ivv_ ____ ____ ih43 ihkj ____ Z___ ih34 ihhi W___ ____ ih43 3434 v___ Z___ ____ 4_4_ i_h_ i_f_ ____ ____ P___ ____ hihi ____ ____ ihih f_g_ j___ ____ hihi k___ ____ ____ ihhi ____ ____ ____  ____ _ihk _kgi  _4gh 34ih __fg  ____ ____ ____  ";
 //TODO いきなりボス戦
-var stages = "____ P___ ";
+//var stages = "____ P___ ";
 stages = stages.replace(/ /g, ""); //空白を削除(空白があったほうがビートが解り易いため)
 
 //var stages = "e_____________________________________"
@@ -856,7 +904,7 @@ enemiesFunctionTable = {
     e.scaleY = 3;
     e.frame = 0;
     //TODO ボスパワー
-    e.power = 100;
+    e.power = 1500;
     e.span = game.beatSpan * 8;
     e.targetX = x;
     e.targetY = y;
