@@ -24,7 +24,9 @@ window.onload = function(){
                          'sound/bomb_all.mp3');
 
      //初期設定
-    game.rate = 1;    game.life = 3;
+    game.rate = 1;
+    game.life = 3;
+    game.bombCount = 2;
     touching = false;
    
     shootSpeed = 8;
@@ -87,6 +89,14 @@ window.onload = function(){
         });
         game.rootScene.addChild(lifeLabel);
 
+        //残ボムを表示
+        bombLabel = new MutableText(480 - (32 * 4 + 8), 32, game.width, "");
+        bombLabel.addEventListener('enterframe', function(){
+            this.text = "BOMB " + "OOOOOOOOO".substring(0, game.bombCount);
+        });
+        game.rootScene.addChild(bombLabel);
+
+
           //プレイヤー(自機)を表示する
         player = new Player(16, 160 - 16/2);
 
@@ -97,11 +107,12 @@ window.onload = function(){
         game.rootScene.addEventListener('enterframe', function(){
             if(game.time == 0)bgm.currentTime = 0;
 
-            if(game.button.pressed && !game.bomb) {
+            if(game.button.pressed && !game.bomb && game.bombCount) {
                 var bomb = new Bomb(0,0);
                 game.bomb = bomb;
                 bombse = game.assets['sound/bomb_all.mp3'].clone();
                 bombse.play(); 
+                game.bombCount--;
             }
 
                //ビートにもとづいて新しい敵を出現させたり、ボス戦に移行させたりする
