@@ -20,7 +20,7 @@ window.onload = function(){
      game.preload('img/graphic.png','sound/loop_142.mp3','sound/boss.mp3',
                          'img/effect0.gif','img/chara1.gif','sound/bomb1.mp3',
                          'sound/bomb2.mp3','sound/item.mp3','img/bg.png','img/background.png'
-                         ,'img/playershoot.png','img/player.png','img/enemy.png');
+                         ,'img/playershoot.png','img/player.png','img/enemy.png','img/boss.png');
 
      //初期設定
     game.rate = 1;    game.life = 3;
@@ -123,7 +123,7 @@ window.onload = function(){
             if((game.beatCount) >= 0 && game.time % (game.beatSpan) == 0){
                 if(game.beatCount > stages.length){
                     // ゲームクリア
-                         alert("game clear");
+//                         alert("game clear");
                 }else{
                          //新しい攻撃パターンに基づいて敵を出現させる
                     pattern = patterns[stages.charAt(game.beatCount)];
@@ -573,7 +573,9 @@ function rand(max){
 
 
 //ステージデータ
-var stages = "____ 22__ 1_12 __1_ 1__2_ __2_ _5__ W4_1 ___2 i___ _gg_ 4___ 5656 1212 ____ ____ ____ ____ 3434 3434 ____ ____ 5566 f___ f___ Z___ ____ 2ge_ ____ f222 ____ ____ ____ X___ ____ ____ ihih j___ ____ f___ ____ Y___ ivv_ ____ ____ ih43 ihkj ____ Z___ ih34 ihhi W___ ____ ih43 3434 v___ Z___ ____ 4_4_ i_h_ i_f_ ____ ____ P___ ____ hihi ____ ____ ihih f_g_ j___ ____ hihi k___ ____ ____ ihhi ____ ____ ____  ____ _ihk _kgi  _4gh 34ih __fg  ____ ____ ____  ";
+//var stages = "____ 22__ 1_12 __1_ 1__2_ __2_ _5__ W4_1 ___2 i___ _gg_ 4___ 5656 1212 ____ ____ ____ ____ 3434 3434 ____ ____ 5566 f___ f___ Z___ ____ 2ge_ ____ f222 ____ ____ ____ X___ ____ ____ ihih j___ ____ f___ ____ Y___ ivv_ ____ ____ ih43 ihkj ____ Z___ ih34 ihhi W___ ____ ih43 3434 v___ Z___ ____ 4_4_ i_h_ i_f_ ____ ____ P___ ____ hihi ____ ____ ihih f_g_ j___ ____ hihi k___ ____ ____ ihhi ____ ____ ____  ____ _ihk _kgi  _4gh 34ih __fg  ____ ____ ____  ";
+//TODO いきなりボス戦
+var stages = "____ P___ ";
 stages = stages.replace(/ /g, ""); //空白を削除(空白があったほうがビートが解り易いため)
 
 //var stages = "e_____________________________________"
@@ -810,7 +812,7 @@ enemiesFunctionTable = {
 
 2: function(x, y){
     var e = new Enemy(x, y);
-    e.frame = 2;
+    e.frame = 3;
     e.scaleX = 2;
     e.scaleY = 2;
     e.span = game.beatSpan * 4;
@@ -837,13 +839,13 @@ enemiesFunctionTable = {
 },
 "boss": function(x, y){
     var e = new Enemy(x, y);
-    e.image = game.assets['img/enemy.gif'];
-    e.width = 32;
-    e.height = 32;
+    e.image = game.assets['img/boss.png'];
+    e.width = 60;
+    e.height = 80;
     e.scaleX = 3;
     e.scaleY = 3;
-    e.frame = 3;
-    e.power = 1500;
+    e.frame = 0;
+    e.power = 1000;
     e.span = game.beatSpan * 8;
     e.targetX = x;
     e.targetY = y;
@@ -857,31 +859,65 @@ enemiesFunctionTable = {
                b = new Blast( Math.random()*100+e.x,
                                  Math.random()*100+e.y);
           }
-          setTimeout(function(){
-             game.end(game.score,'Clear! Score:' + game.score);},4000);
+//TODO: 終了判定
+          // setTimeout(function(){
+             // game.end(game.score,'Clear! Score:' + game.score);},4000);
     };
     e.bulletpattern = {};
     e.bulletpattern[0] = function(){
         bs = 60;
         for(var i = 0; i < bs; i++){
-            var b = new Bullet(this.x, this.y);
-            b.parent = e;
-            b.key = bullets.length;
-            b.speed = 2;
-            b.direction = (i / bs)* (Math.PI*2);
-            b.time = 0;
-            b.addEventListener('enterframe', function(){
-                b.time ++;
-                b.x = parent.x + Math.sin(b.direction) * b.dist;
-                b.y = parent.y + Math.cos(b.direction) * b.dist;
-            });
-            bullets.push(b);
+            // var b = new Bullet(this.x, this.y);
+            // b.parent = e;
+            // b.key = bullets.length;
+            // b.speed = 2;
+            // b.direction = (i / bs)* (Math.PI*2);
+            // b.time = 0;
+            // b.addEventListener('enterframe', function(){
+                // b.time ++;
+                // b.x = parent.x + Math.sin(b.direction) * b.dist;
+                // b.y = parent.y + Math.cos(b.direction) * b.dist;
+            // });
+            // bullets.push(b);
         }  
     }
     e.addEventListener('enterframe', function(){
         this.y = 100 + Math.sin(game.frame/60) * 100;
-        if(game.time % this.span == 0){
-            e.bulletpattern[0]
+//        if(game.time % this.span / 2 == 0){
+//            e.bulletpattern[0]();
+        if (game.time % 20 <= 10) {
+
+            var s = new Bullet(this.x + 35, this.y + 8);
+            s.key = bullets.length;
+            s.direction = -0.2;
+            s.vx = -s.speed * Math.cos(s.direction);
+            s.vy = -s.speed * Math.sin(s.direction);
+            bullets.push(s);
+            var s = new Bullet(this.x + 35, this.y + 8);
+            s.key = bullets.length;
+            s.direction = -0.4;
+            s.vx = -s.speed * Math.cos(s.direction);
+            s.vy = -s.speed * Math.sin(s.direction);
+            bullets.push(s);
+            var s = new Bullet(this.x + 35, this.y + 2);
+            s.key = bullets.length;
+            s.direction = 0.2;
+            s.vx = -s.speed * Math.cos(s.direction);
+            s.vy = -s.speed * Math.sin(s.direction);
+            var s = new Bullet(this.x + 35, this.y + 2);
+            s.key = bullets.length;
+            s.direction = 0.4;
+            s.vx = -s.speed * Math.cos(s.direction);
+            s.vy = -s.speed * Math.sin(s.direction);
+            bullets.push(s);
+            var s = new Bullet(this.x + 35, this.y + 5);
+            s.key = bullets.length;
+            bullets.push(s); 
+
+        }
+//        }
+        if(game.time % 10 == 0) {
+            this.frame = !this.frame;
         }
     });
     bossBattle = true;
