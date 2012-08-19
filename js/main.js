@@ -4,10 +4,16 @@
 
 enchant();
 
+
+var PLAYER_WIDTH = 40;
+var PLAYER_HEIGNT = 20;
+var FRAME_SIZE_WIDTH = 480;
+var FRAME_SIZE_HEIGHT = 300;
+
 window.onload = function(){
 
 
-    game = new Game(480, 300);
+    game = new Game(FRAME_SIZE_WIDTH, FRAME_SIZE_HEIGHT);
     game.fps = 24;
 
      //画像の読み込み
@@ -155,9 +161,6 @@ window.onload = function(){
 var shoots = [];     //プレイヤーの撃った弾の配列
 var bullets = [];     //敵の撃った弾の配列
 var enemies = [];     //敵の配列
-
-var PLAYER_WIDTH = 40;
-var PLAYER_HEIGNT = 20;
 
 
 //プレイヤーのクラス
@@ -401,7 +404,7 @@ var Enemy = enchant.Class.create(enchant.Sprite, {
             }
             this.x += Math.ceil((this.targetX - this.x)/30);
             this.y += Math.ceil((this.targetY - this.y)/30);
-            if(this.time > game.beatSpan * 16 && (this.y > 320 || this.x > 320 || this.x < -this.width || this.y < -this.height)){
+            if(this.time > game.beatSpan * 16 && (this.y > FRAME_SIZE_HEIGHT || this.x > FRAME_SIZE_WIDTH || this.x < -this.width || this.y < -this.height)){
                 this.remove();
             }
 
@@ -437,7 +440,7 @@ var Shoot = enchant.Class.create(enchant.Sprite, {
         this.addEventListener('enterframe', function(){ //ひたすらまっすぐ飛んで行く
             this.x += this.vx;
             this.y += this.vy;
-            if(this.y > 320 || this.x > 320 || this.x < -this.width || this.y < -this.height){
+            if(this.y > FRAME_SIZE_HEIGHT || this.x > FRAME_SIZE_WIDTH || this.x < -this.width || this.y < -this.height){
                 this.remove(); //画面外にでたら消える
             }
         });
@@ -473,7 +476,7 @@ var Bullet = enchant.Class.create(enchant.Sprite, {
             this.y += this.vy;
         }
         this.check = function(){
-            if(this.y > 320 || this.x > 320 || this.x < -this.width || this.y < -this.height){
+            if(this.y > FRAME_SIZE_HEIGHT || this.x > FRAME_SIZE_WIDTH || this.x < -this.width || this.y < -this.height){
                 this.remove();
             }//画面外にでてたら消える
         }
@@ -519,7 +522,7 @@ var Item = enchant.Class.create(enchant.Sprite, {
             }
             this.x += this.speed * Math.cos(this.direction);
             this.y += this.speed * Math.sin(this.direction);
-            if(this.y > 320 || this.x > 320 || this.x < -this.width || this.y < -this.height){
+            if(this.y > FRAME_SIZE_HEIGHT || this.x > FRAME_SIZE_WIDTH || this.x < -this.width || this.y < -this.height){
                 this.remove();
             }
         });
